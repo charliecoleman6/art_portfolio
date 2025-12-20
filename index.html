@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Art Portfolio – Gallery</title>
+
+  <style>
+    :root {
+      --bg: #b9d7ff;
+      --text: #23235f;
+      --muted: #3665f3;
+      --accent: #b38b5a;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ---- GLOBAL ---- */
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* ---- HERO / TITLE SECTION ---- */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 6vw 40px;
+
+    }
+
+    .hero-label {
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .hero-title {
+      font-family: "Helvetica", sans-serif;
+      font-size: clamp(2.8rem, 5vw, 4rem);
+      margin: 0 0 1rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1.1rem;
+      max-width: 520px;
+      line-height: 1.6;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-meta {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    /* ---- PIECE SECTIONS ---- */
+    .section {
+      display: flex;
+      gap: 60px;
+      padding: 120px 6vw;
+      align-items: flex-start;
+    }
+
+    /* alternate left/right layout */
+    .section:nth-of-type(even) {
+      flex-direction: row-reverse;
+    }
+
+    /* Title / info column */
+    .title-block {
+      flex: 0 0 32%;
+      position: sticky;
+      top: 18vh;
+      align-self: flex-start;
+    }
+
+    .piece-label {
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .piece-title {
+      font-family: "Helvetica Neue", sans-serif;
+      font-size: 1.8rem;
+      margin: 0 0 0.5rem;
+    }
+
+    .piece-meta {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 1.25rem;
+    }
+
+    .piece-description {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: #3b352e;
+    }
+
+    /* Image grid */
+    .img-block {
+      flex: 1;
+      /* Stack images linearly (one per row) so they scroll vertically */
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .img-block figure {
+      margin: 0;
+      /* Remove decorative frame so only the image shows */
+      overflow: visible;
+      border-radius: 0;
+      border: none;
+      background: transparent;
+      box-shadow: none;
+      position: relative;
+      display: block;
+      padding: 0;
+    }
+
+    .img-block img {
+      display: block;
+      margin: 0 auto;
+      /* preserve original dimensions while remaining responsive */
+      width: auto;
+      height: auto;
+      max-width: 100%; /* don't overflow the container */
+      max-height: 80vh; /* prevent extremely tall images from growing past the viewport */
+      object-fit: unset;
+      transform: scale(1);
+      transition: transform 0.5s ease, filter 0.4s ease;
+    }
+
+    /* Utility class to make a specific image render larger (fills container width) */
+    .img-block img.full-width {
+      width: 100%;
+      height: auto;
+      max-width: none;
+      max-height: none;
+      margin: 0;
+    }
+
+    .img-block figure:hover img {
+      transform: scale(1.03);
+      filter: contrast(1.03);
+    }
+
+    .img-caption {
+      /* make captions simple text placed under the image (no pill background) */
+      position: static;
+      margin-top: 8px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      background: transparent;
+      padding: 0;
+      border-radius: 0;
+      backdrop-filter: none;
+      display: block;
+      max-width: 100%;
+    }
+
+    /* ---- FOOTER ---- */
+    footer {
+      padding: 40px 6vw 70px;
+      font-size: 1rem;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    /* ---- RESPONSIVE ---- */
+    /* Target medium screens between 601px and 900px */
+    @media (min-width: 601px) and (max-width: 900px) {
+      .section {
+        flex-direction: column;
+        padding: 80px 6vw;
+        gap: 32px;
+      }
+
+      .section:nth-of-type(even) {
+        flex-direction: column;
+      }
+
+      .title-block {
+        position: static;
+        top: auto;
+      }
+
+      .img-block {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Centered section variant for single-piece display */
+    .section.centered {
+      flex-direction: column !important;
+      align-items: center;
+      text-align: center;
+    }
+
+    .section.centered .title-block {
+      position: static;
+      top: auto;
+      flex: 0 0 auto;
+      width: 100%;
+      max-width: 880px;
+      margin: 0 auto 12px;
+    }
+
+    .section.centered .img-block {
+      width: 100%;
+      max-width: 880px;
+      margin: 0 auto;
+    }
+    /* Center footer contents inside the main column */
+    .footer-inner {
+      max-width: 880px;
+      margin: 0 auto;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <!-- HERO / TITLE -->
+    <section class="hero">
+      <div class="hero-label">Portfolio</div>
+      <h1 class="hero-title">Charlie Coleman</h1>
+      <p class="hero-subtitle">
+        A collection of wearable sculptures and artistic experiments.
+      </p>
+      <div class="hero-meta">
+        <!-- You can customize this line -->
+        Based in La Jolla, CA · Sculpture, Textile, and Print
+      </div>
+    </section>
+
+    <!-- PIECE 1 -->
+    <section class="section">
+      <div class="title-block">
+        <div class="piece-label">01</div>
+        <h2 class="piece-title">abduction hat</h2>
+        <div class="piece-meta">2024 · alpaca, cotton, wool · 12" x 12" x 18" </div>
+      </div>
+
+      <div class="img-block">
+        <figure>
+          <img src="images/DSC07219_1.jpg" loading="lazy" decoding="async"alt="Piece 1 view 1" />
+        </figure>
+        <figure>
+          <img src="images/DSC07221_1.jpg" loading="lazy" decoding="async"alt="Piece 1 view 2" />
+        </figure>
+        <figure>
+          <img src="images/DSC07215.jpg" loading="lazy" decoding="async" alt="Piece 1 detail" />
+        </figure>
+        <figure>
+          <img src="images/DSC07209_1.jpg" loading="lazy" decoding="async" alt="Piece 1 view 3" />
+        </figure>
+      </div>
+    </section>
+
+    <!-- PIECE 2 -->
+    <section class="section">
+      <div class="title-block">
+        <div class="piece-label">02</div>
+        <h2 class="piece-title">self-portrait`</h2>
+        <div class="piece-meta">2025 · bronze, plaster · 14" x 9" x 5"</div>
+      </div>
+
+      <div class="img-block">
+        <figure>
+          <img src="images/FFTT1.jpg" loading="lazy" decoding="async"alt="Piece 2 view 1" />
+        </figure>
+        <figure>
+          <img src="images/DSC07185.jpg" loading="lazy" decoding="async" alt="Piece 2 view 2" />
+        </figure>
+        <figure>
+          <img src="images/DSC07189.jpg" loading="lazy" decoding="async" alt="Piece 2 view 3" />
+        </figure>
+        <figure>
+          <img src="images/DSC07190.jpg" loading="lazy" decoding="async" alt="Piece 2 view 4" />
+        </figure>
+      </div>
+    </section>
+
+<!-- PIECE 3 -->
+    <section class="section">
+      <div class="title-block">
+        <div class="piece-label">03</div>
+        <h2 class="piece-title">feel free to touch | print</h2>
+        <div class="piece-meta">2025 · screen print on paper · 17" x 22"</div>
+      </div>
+
+      <div class="img-block">
+        <figure>
+          <!-- Make this PNG render larger by giving it the .full-width class -->
+          <img class="full-width" src="images/FFTT_print.png" loading="lazy" decoding="async" alt="feel free to touch--translated into screen print" />
+        </figure>
+      </div>
+    </section>
+
+    <!-- PIECE 4 -->
+    <section class="section">
+      <div class="title-block">
+        <div class="piece-label">04</div>
+        <h2 class="piece-title">lobster #1</h2>
+        <div class="piece-meta">2025 · screen print on paper · 17" x 22"</div>
+      </div>
+
+      <div class="img-block">
+        <figure>
+          <!-- Make this PNG render larger by giving it the .full-width class -->
+          <img class="full-width" src="images/lobster_print_1.png" loading="lazy" decoding="async" alt="Lobster #1" />
+        </figure>
+      </div>
+    </section>
+
+    <!-- PIECE 5 -->
+      <section class="section">
+      <div class="title-block">
+        <div class="piece-label">05</div>
+        <h2 class="piece-title">tight grasp</h2>
+        <div class="piece-meta">2025 · bronze · 2" x 5" x 3"</div>
+      </div>
+<div class="img-block">
+        <figure>
+          <img src="images/DSC07231.jpg" loading="lazy" decoding="async"alt="Piece 4 view 1" />
+        </figure>
+        <figure>
+          <img src="images/DSC07236.jpg" loading="lazy" decoding="async" alt="Piece 4 view 2" />
+        </figure>
+        <figure>
+          <img src="images/DSC07238.png" loading="lazy" decoding="async" alt="Piece 4 view 3" />
+        </figure>
+        <figure>
+          <img src="images/DSC07241.png" loading="lazy" decoding="async" alt="Piece 4 view 4" />
+        </figure>
+      </div>
+    </section>
+
+        <!-- PIECE 6 -->
+      <section class="section">
+      <div class="title-block">
+        <div class="piece-label">06</div>
+        <h2 class="piece-title">scrap tapestry</h2>
+        <div class="piece-meta">2025 · recycled fabric and tennis racket strings · 18" x 45" x 0.5"</div>
+      </div>
+<div class="img-block">
+        <figure>
+          <img src="images/DSC07199.jpg" loading="lazy" decoding="async" alt="Piece 6 view 1" />
+        </figure>
+        <figure>
+          <img src="images/DSC07176-Edit.jpg" loading="lazy" decoding="async" alt="Piece 6 view 2" />
+        </figure>
+        <figure>
+          <img src="images/DSC07173.jpg" loading="lazy" decoding="async" alt="Piece 6 view 3" />
+        </figure>
+        <figure>
+          <img src="images/DSC07196.jpg" loading="lazy" decoding="async" alt="Piece 6 view 4" />
+        </figure>
+      </div>
+    </section>
+
+    <footer>
+      <div class="footer-inner">© 2025 Charlie Coleman. Contact me at charliekcoleman@gmail.com.</div>
+    </footer>
+  </main>
+</body>
+</html>
