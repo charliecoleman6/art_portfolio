@@ -40,10 +40,33 @@
     .hero {
       min-height: 100vh;
       display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: 80px 6vw 40px;
+      gap: 60px;
+    }
+
+    .hero-content {
+      flex: 1;
+      display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 80px 6vw 40px;
+    }
 
+    .hero-image {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .hero-image img {
+      max-width: 100%;
+      height: auto;
+      max-height: 70vh;
+      object-fit: contain;
+      transform: rotate(90deg);
     }
 
     .hero-label {
@@ -247,14 +270,19 @@
   <main>
     <!-- HERO / TITLE -->
     <section class="hero">
-      <div class="hero-label">Portfolio</div>
-      <h1 class="hero-title">Charlie Coleman</h1>
-      <p class="hero-subtitle">
-        I can’t fully understand something unless I can touch it. As such, my work features a wide textural variety, encouraging the viewer to wander and explore by feeling. My work ranges from upcycled textiles to figurative sculpture, walking the line between physical exploration and personal discomfort. Viewers are welcome to pick up, try on, and reorganize the different parts of my face featured in my sculpture. I ask the question, “how much contact is too much?” 
-      </p>
-      <div class="hero-meta">
-        <!-- You can customize this line -->
-        Based in La Jolla, CA 
+      <div class="hero-content">
+        <div class="hero-label">Portfolio</div>
+        <h1 class="hero-title">Charlie Coleman</h1>
+        <p class="hero-subtitle">
+          I can't fully understand something unless I can touch it. As such, my work features a wide textural variety, encouraging the viewer to wander and explore by feeling. My work ranges from upcycled textiles to figurative sculpture, walking the line between physical exploration and personal discomfort. Viewers are welcome to pick up, try on, and reorganize the different parts of my face featured in my sculpture. I ask the question, "how much contact is too much?" 
+        </p>
+        <div class="hero-meta">
+          <!-- You can customize this line -->
+          Based in La Jolla, CA 
+        </div>
+      </div>
+      <div class="hero-image">
+        <img src="images/IMG_6037.webp" alt="Portfolio featured work" />
       </div>
     </section>
 
